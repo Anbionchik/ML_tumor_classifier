@@ -8,50 +8,39 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "7b8abeeece4cec3a07c68f1979c185e426061afbd1b1951dd1702859bc07074cd1d8dbb371ff42cf16e8"
 
-with open('logreg_pipeline.dill', 'rb') as in_strm:
+with open('models/lightgbm_pipeline.dill', 'rb') as in_strm:
     model = dill.load(in_strm)
-
-# run_with_ngrok(app)  # Start ngrok when app is run
-list_for_render = [1, 2, 3, 4, 5]
-
+data = pd.read_csv('data/X_test.csv')
+threshold = 0.6249811557828746
 
 @app.route("/", methods=["GET"])
 def general():
-    return render_template('index.html', name=list_for_render)
+    return render_template('index.html')
 
 
 @app.route('/predict', methods=['GET', 'POST'])
 def fill_predict():
     form = TumorForm()
+    range_limit = data.shape[0]
     if form.validate_on_submit():
-        flash(f'Выбрано {form.tumor_number.data}', 'success')
-    return render_template('predict.html', name=None, form=form)
+        flash(f'Выбран объект № {form.tumor_number.data}.')
+        prediction = predict(form.tumor_number.data)
+        if prediction:
+            flash(f'Злокачественная образование.', 'danger')
+        else:
+            flash(f'Доброкачественное образование.', 'success')
 
-# @app.post('/predict')
-# def predict():
-#     data = {"success": False}
-#
-#     # ensure an image was properly uploaded to our endpoint
-#     request_json = request.get_json()
-#
-#     #     if request_json["description"]:
-#     #         description = request_json['description']
-#
-#     #     if request_json["company_profile"]:
-#     #         company_profile = request_json['company_profile']
-#
-#     #     if request_json["benefits"]:
-#     #         benefits = request_json['benefits']
-#
-#     preds = model.predict_proba(pd.read_json(request_json))
-#     data["predictions"] = preds[:, 1][0]
-#     #     data["description"] = description
-#     # indicate that the request was a success
-#     data["success"] = True
-#     print('OK')
-#
-#     # return the data dictionary as a JSON response
-#     return jsonify(data)
+    return render_template('predict.html', range_limit=range_limit, form=form)
+
+
+def predict(tumor_number):
+    tumor_object = pd.DataFrame(data.iloc[tumor_number - 1]).T
+    prediction = model.predict_proba(tumor_object)[:, 1]
+    if prediction > threshold:
+        return True
+    else:
+        return False
+
 
 
 if __name__ == '__main__':

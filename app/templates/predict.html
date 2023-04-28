@@ -4,7 +4,10 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form=group">
-                <legend>Выберите объект</legend>
+                <legend>Выбор объекта</legend>
+                <div>
+                    Выберите номер объекта из тестовой выборки. Введите число от 1 до {{ range_limit }}.
+                </div>
                 <div>
                     {{ form.tumor_number.label(class="form-control-label") }}
                     {{ form.tumor_number(class="form-control form-control-lg") }}
