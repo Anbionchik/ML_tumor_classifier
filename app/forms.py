@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import IntegerField, SubmitField
+from wtforms.validators import InputRequired, NumberRange
 
 class TumorForm(FlaskForm):
-    tumor_number = StringField('№ Опухоли')
+    tumor_number = IntegerField('№ Опухоли',
+                               validators=[InputRequired(message='Вы не ввели значение.'),
+                                           NumberRange(min=0, max=171)])
     submit = SubmitField('Подтвердить')
