@@ -8,9 +8,9 @@
                 <div>
                     Выберите номер объекта из тестовой выборки. Введите число от 1 до {{ range_limit }}.
                 </div>
-                <div>
+                <div class="form-group">
                     {{ form.tumor_number.label(class="form-control-label") }}
-                    {{ form.tumor_number(class="form-control form-control-lg") }}
+                    {{ form.tumor_number(class="form-control", style='margin:10px') }}
                 </div>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
