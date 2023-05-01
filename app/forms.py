@@ -5,5 +5,5 @@ from wtforms.validators import InputRequired, NumberRange
 class TumorForm(FlaskForm):
     tumor_number = IntegerField('№ Опухоли',
                                validators=[InputRequired(message='Вы не ввели значение.'),
-                                           NumberRange(min=0, max=171)])
+                                           NumberRange(min=1, max=171)])
     submit = SubmitField('Подтвердить')

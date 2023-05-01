@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class="container">
+        <div style="margin: auto">
+            <div class=>
+                <h1>Здравствуйте!</h1>
+                Это приложение демонстрирует работу модели, которая классифицирует опухоль на злокачественные и доброкачественные.<br>
+                Модель: LightGBM<br>
+                Данные: <a class="link" href="https://www.kaggle.com/datasets/erdemtaha/cancer-data">https://www.kaggle.com/datasets/erdemtaha/cancer-data</a>
+            </div>
+            <a href="{{ url_for('fill_predict') }}">Предсказать</a>
+        </div>
+    </div>
+{% endblock content %}
